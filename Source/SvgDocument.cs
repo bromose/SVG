@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -44,7 +45,7 @@ namespace Svg
                 return _idManager;
             }
         }
-        
+
         /// <summary>
         /// Overwrites the current IdManager with a custom implementation. 
         /// Be careful with this: If elements have been inserted into the document before,
@@ -53,7 +54,7 @@ namespace Svg
         /// <param name="manager"></param>
         public void OverwriteIdManager(SvgElementIdManager manager)
         {
-        	_idManager = manager;
+            _idManager = manager;
         }
 
         /// <summary>
@@ -114,8 +115,8 @@ namespace Svg
         {
             return (this.GetElementById(id) as TSvgElement);
         }
-        
-                /// <summary>
+
+        /// <summary>
         /// Opens the document at the specified path and loads the SVG contents.
         /// </summary>
         /// <param name="path">A <see cref="string"/> containing the path of the file to open.</param>
@@ -241,7 +242,7 @@ namespace Svg
                                 if (value.Length > 0 && element != null)
                                 {
                                     element.Content = value.ToString();
-                                    
+
                                     // Reset content value for new element
                                     value.Clear();
                                 }
@@ -291,20 +292,20 @@ namespace Svg
 
         public RectangleF GetDimensions()
         {
-        	var w = Width.ToDeviceValue();
-        	var h = Height.ToDeviceValue();
-        	
-        	RectangleF bounds = new RectangleF();
-        	var isWidthperc = Width.Type == SvgUnitType.Percentage;
-        	var isHeightperc = Height.Type == SvgUnitType.Percentage;
+            var w = Width.ToDeviceValue();
+            var h = Height.ToDeviceValue();
 
-        	if(isWidthperc || isHeightperc)
-        	{
-        		bounds = this.Bounds; //do just one call to the recursive bounds property
-        		if(isWidthperc) w = (bounds.Width + bounds.X) * (w * 0.01f);
-        		if(isHeightperc) h = (bounds.Height + bounds.Y) * (h * 0.01f);
-        	}
-        	
+            RectangleF bounds = new RectangleF();
+            var isWidthperc = Width.Type == SvgUnitType.Percentage;
+            var isHeightperc = Height.Type == SvgUnitType.Percentage;
+
+            if (isWidthperc || isHeightperc)
+            {
+                bounds = this.Bounds; //do just one call to the recursive bounds property
+                if (isWidthperc) w = (bounds.Width + bounds.X) * (w * 0.01f);
+                if (isHeightperc) h = (bounds.Height + bounds.Y) * (h * 0.01f);
+            }
+
             return new RectangleF(0, 0, w, h);
         }
 
@@ -348,7 +349,7 @@ namespace Svg
 
             var size = GetDimensions();
             var bitmap = new Bitmap((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height));
-       // 	bitmap.SetResolution(300, 300);
+            // 	bitmap.SetResolution(300, 300);
             try
             {
                 Draw(bitmap);
@@ -404,11 +405,69 @@ namespace Svg
 
         public void Write(string path)
         {
-            using(var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+            using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
                 this.Write(fs);
             }
         }
+        /// <summary>
+        /// The event raised when a font family is needed.  This enables support for fonts that are not locally installed.
+        /// </summary>
+        public event EventHandler<FontFamilyLookupArgs> FontFamilyLookup;
+        /// <summary>
+        /// Gets a FontFamily for a given font family name
+        /// </summary>
+        /// <param name="name">The name of the FontFamily to quire</param>
+        /// <returns>A newly created FontFamily based on the given name</returns>
+        public FontFamily GetFontFamily(string name)
+        {
+            try
+            {
+                if (FontFamilyLookup != null)
+                {
+                    var e = new FontFamilyLookupArgs(name);
+                    FontFamilyLookup(this, e);
+                    return e.FontFamily ?? new FontFamily(name);
+                }
+                else
+                {
+                    return new FontFamily(name);
+                }
+            }
+            catch
+            {
+                return new FontFamily(SvgText.DefaultFontFamily);
+            }
+        }
 
+        public string ValidateFontFamily(string name)
+        {
+            // Split font family list on "," and then trim start and end spaces and quotes.
+            var fontParts = name.Split(new[] { ',' }).Select(fontName => fontName.Trim(new[] { '"', ' ' }));
+
+            var families = System.Drawing.FontFamily.Families;
+
+            // Find a the first font that exists in the list of installed font families.
+            //styles from IE get sent through as lowercase.
+            foreach (var f in fontParts.Where(f => families.Any(family => family.Name.ToLower() == f.ToLower())))
+            {
+                return f;
+            }
+            if (FontFamilyLookup != null)
+                foreach (var part in fontParts)
+                {
+                    try
+                    {
+                        var e = new FontFamilyLookupArgs(part);
+                        FontFamilyLookup(this, e);
+                        if (e.FontFamily != null)
+                            return e.FontFamily.Name;
+                    }
+                    catch { }
+                }
+            // No valid font family found from the list requested.
+            return SvgText.DefaultFontFamily;
+
+        }
     }
 }

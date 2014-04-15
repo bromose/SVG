@@ -96,7 +96,7 @@ namespace Svg
             { 
             	var path = new GraphicsPath();
 
-            	AddPaths(this, path);
+            	AddPaths(this, path, this.Transforms);
   
             	return path;
             }

@@ -100,7 +100,7 @@ namespace Svg.Transforms
         	}
         }	
     	
-		public object Clone()
+		public SvgTransformCollection Clone()
 		{
 			var result = new SvgTransformCollection();
 			foreach (var trans in this) 
@@ -109,5 +109,10 @@ namespace Svg.Transforms
 			}
 			return result;
 		}
+
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
     }
 }
