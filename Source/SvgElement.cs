@@ -42,6 +42,7 @@ namespace Svg
         private static readonly object _loadEventKey = new object();
         private Matrix _graphicsMatrix;
         private SvgCustomAttributeCollection _customAttributes;
+        SvgBuilder m_builder;
 
         /// <summary>
         /// Gets the name of the element.
@@ -913,6 +914,20 @@ namespace Svg
 
         #endregion graphical EVENTS
 
+        /// <summary>
+        /// Gets or sets the builder for this element, which provides a context
+        /// </summary>
+        public SvgBuilder SvgBuilder
+        {
+            get
+            {
+                return m_builder ?? SvgBuilder.Default;
+            }
+            set
+            {
+                m_builder = value;
+            }
+        }
     }
 
     public class SVGArg : EventArgs

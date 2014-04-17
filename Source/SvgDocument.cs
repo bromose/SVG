@@ -177,91 +177,8 @@ namespace Svg
         /// <exception cref="ArgumentNullException">The <paramref name="stream"/> parameter cannot be <c>null</c>.</exception>
         public static T Open<T>(Stream stream, Dictionary<string, string> entities) where T : SvgDocument, new()
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException("stream");
-            }
-
-            //Trace.TraceInformation("Begin Read");
-
-            using (var reader = new SvgTextReader(stream, entities))
-            {
-                var elementStack = new Stack<SvgElement>();
-                var value = new StringBuilder();
-                bool elementEmpty;
-                SvgElement element = null;
-                SvgElement parent;
-                T svgDocument = null;
-                reader.XmlResolver = new SvgDtdResolver();
-                reader.WhitespaceHandling = WhitespaceHandling.None;
-
-                while (reader.Read())
-                {
-                    try
-                    {
-                        switch (reader.NodeType)
-                        {
-                            case XmlNodeType.Element:
-                                // Does this element have a value or children
-                                // (Must do this check here before we progress to another node)
-                                elementEmpty = reader.IsEmptyElement;
-                                // Create element
-                                if (elementStack.Count > 0)
-                                {
-                                    element = SvgElementFactory.CreateElement(reader, svgDocument);
-                                }
-                                else
-                                {
-                                    svgDocument = SvgElementFactory.CreateDocument<T>(reader);
-                                    element = svgDocument;
-                                }
-
-                                // Add to the parents children
-                                if (elementStack.Count > 0)
-                                {
-                                    parent = elementStack.Peek();
-                                    if (parent != null && element != null)
-                                        parent.Children.Add(element);
-                                }
-
-                                // Push element into stack
-                                elementStack.Push(element);
-
-                                // Need to process if the element is empty
-                                if (elementEmpty)
-                                {
-                                    goto case XmlNodeType.EndElement;
-                                }
-
-                                break;
-                            case XmlNodeType.EndElement:
-
-                                // Pop the element out of the stack
-                                element = elementStack.Pop();
-
-                                if (value.Length > 0 && element != null)
-                                {
-                                    element.Content = value.ToString();
-
-                                    // Reset content value for new element
-                                    value.Clear();
-                                }
-                                break;
-                            case XmlNodeType.CDATA:
-                            case XmlNodeType.Text:
-                                value.Append(reader.Value);
-                                break;
-                        }
-                    }
-                    catch (Exception exc)
-                    {
-                        Trace.TraceError(exc.Message);
-                    }
-                }
-
-                //Trace.TraceInformation("End Read");
-                return svgDocument;
-            }
+            var builder = new SvgBuilder(Activator.CreateInstance<T>);
+            return (T)builder.Open(stream, entities);
         }
 
         /// <summary>
@@ -409,65 +326,6 @@ namespace Svg
             {
                 this.Write(fs);
             }
-        }
-        /// <summary>
-        /// The event raised when a font family is needed.  This enables support for fonts that are not locally installed.
-        /// </summary>
-        public event EventHandler<FontFamilyLookupArgs> FontFamilyLookup;
-        /// <summary>
-        /// Gets a FontFamily for a given font family name
-        /// </summary>
-        /// <param name="name">The name of the FontFamily to quire</param>
-        /// <returns>A newly created FontFamily based on the given name</returns>
-        public FontFamily GetFontFamily(string name)
-        {
-            try
-            {
-                if (FontFamilyLookup != null)
-                {
-                    var e = new FontFamilyLookupArgs(name);
-                    FontFamilyLookup(this, e);
-                    return e.FontFamily ?? new FontFamily(name);
-                }
-                else
-                {
-                    return new FontFamily(name);
-                }
-            }
-            catch
-            {
-                return new FontFamily(SvgText.DefaultFontFamily);
-            }
-        }
-
-        public string ValidateFontFamily(string name)
-        {
-            // Split font family list on "," and then trim start and end spaces and quotes.
-            var fontParts = name.Split(new[] { ',' }).Select(fontName => fontName.Trim(new[] { '"', ' ' }));
-
-            var families = System.Drawing.FontFamily.Families;
-
-            // Find a the first font that exists in the list of installed font families.
-            //styles from IE get sent through as lowercase.
-            foreach (var f in fontParts.Where(f => families.Any(family => family.Name.ToLower() == f.ToLower())))
-            {
-                return f;
-            }
-            if (FontFamilyLookup != null)
-                foreach (var part in fontParts)
-                {
-                    try
-                    {
-                        var e = new FontFamilyLookupArgs(part);
-                        FontFamilyLookup(this, e);
-                        if (e.FontFamily != null)
-                            return e.FontFamily.Name;
-                    }
-                    catch { }
-                }
-            // No valid font family found from the list requested.
-            return SvgText.DefaultFontFamily;
-
         }
     }
 }

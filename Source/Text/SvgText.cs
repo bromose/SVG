@@ -145,7 +145,7 @@ namespace Svg
             get { return this._fontFamily; }
             set
             {
-                this._fontFamily = OwnerDocument.ValidateFontFamily(value);
+                this._fontFamily = SvgBuilder.ValidateFontFamily(value);
                 this.IsPathDirty = true;
             }
         }
@@ -202,7 +202,7 @@ namespace Svg
                         this.FontWeight = SvgFontWeight.bold;
                     }
                 }
-                var font = OwnerDocument.ValidateFontFamily(value);
+                var font = SvgBuilder.ValidateFontFamily(value);
                 this._fontFamily = font;
                 this._font = font; //not sure this is used?
 
@@ -283,7 +283,7 @@ namespace Svg
                     }
 
                 	FontStyle fontWeight = (this.FontWeight == SvgFontWeight.bold ? FontStyle.Bold : FontStyle.Regular);
-					Font font = new Font(this.OwnerDocument.GetFontFamily(this._fontFamily), fontSize, fontWeight, GraphicsUnit.Pixel);
+					Font font = new Font(this.SvgBuilder.GetFontFamily(this._fontFamily), fontSize, fontWeight, GraphicsUnit.Pixel);
                     
 
                     _path = new GraphicsPath();
