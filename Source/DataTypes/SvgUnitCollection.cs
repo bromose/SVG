@@ -23,6 +23,23 @@ namespace Svg
 
             return ret;
         }
+
+        public void Offset(float dx, float dy)
+        {
+            for (int i = 0; i < Count; i += 2)
+            {
+                this[i] += dx;
+                this[i + 1] += dy;
+            }
+        }
+
+        public void Scale(float scale)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                this[i] *= scale;
+            }
+        }
     }
 
     /// <summary>

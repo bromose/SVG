@@ -20,8 +20,6 @@ namespace Svg
         public static readonly int PointsPerInch = 96;
         private SvgElementIdManager _idManager;
 
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SvgDocument"/> class.
         /// </summary>

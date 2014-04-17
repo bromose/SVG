@@ -93,5 +93,18 @@ namespace Svg
 				newObj.Points.Add(pt);
 			return newObj;
 		}
+
+        #region Edits
+        public override void EditOffset(float dx, float dy)
+        {
+            Points.Offset(dx, dy);
+            base.EditOffset(dx, dy);
+        }
+        public override void EditScale(float scale)
+        {
+            Points.Scale(scale);
+            base.EditScale(scale);
+        }
+        #endregion
     }
 }

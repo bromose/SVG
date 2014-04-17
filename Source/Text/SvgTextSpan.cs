@@ -60,7 +60,6 @@ namespace Svg
 			set { this._dy = value; }
 		}
 		
-
 		/// <summary>
 		/// Gets or sets the text to be rendered.
 		/// </summary>
@@ -69,8 +68,6 @@ namespace Svg
 			get { return base.Content; }
 			set { base.Content = value; this.Content = value; }
 		}
-
-
 
 		public override SvgElement DeepCopy()
 		{
@@ -89,6 +86,22 @@ namespace Svg
 			return newObj;
 		}
 
+        #region Edit
+        public override void EditOffset(float dx, float dy)
+        {
+            X += dx;
+            Y += dy;
+            base.EditOffset(dx, dy);
+        }
 
+        public override void EditScale(float scale)
+        {
+            X *= scale;
+            Y *= scale;
+            DX *= scale;
+            DY *= scale;
+            base.EditScale(scale);
+        }
+        #endregion
     }
 }

@@ -108,5 +108,22 @@ namespace Svg.Pathing
         {
             return this._segments.GetEnumerator();
         }
+
+        #region Edits
+        public void Offset(float dx, float dy)
+        {
+            foreach (var seg in _segments)
+            {
+                seg.EditOffset(dx, dy);
+            }
+        }
+        public void Scale(float scale)
+        {
+            foreach (var seg in _segments)
+            {
+                seg.EditScale(scale);
+            }
+        }
+        #endregion
     }
 }

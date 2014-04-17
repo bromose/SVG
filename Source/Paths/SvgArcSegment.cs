@@ -159,6 +159,20 @@ namespace Svg.Pathing
         	var sweepFlag = this.Sweep == SvgArcSweep.Positive ? "1" : "0";
         	return "A" + this.RadiusX.ToString() + " " + this.RadiusY.ToString() + " " + this.Angle.ToString() + " " + arcFlag + " " + sweepFlag + " " + this.End.ToSvgString();
         }
+
+        #region Edits
+        public override void EditOffset(float dx, float dy)
+        {
+            base.EditOffset(dx, dy);
+        }
+
+        public override void EditScale(float scale)
+        {
+            RadiusX *= scale;
+            RadiusY *= scale;
+            base.EditScale(scale);
+        }
+        #endregion
     }
 
     [Flags]

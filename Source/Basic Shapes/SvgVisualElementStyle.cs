@@ -127,5 +127,13 @@ namespace Svg
             get { return (this.Attributes["opacity"] == null) ? 1.0f : (float)this.Attributes["opacity"]; }
             set { this.Attributes["opacity"] = FixOpacityValue(value); }
         }
+
+        #region Edit
+        public override void EditScale(float scale)
+        {
+            StrokeWidth *= scale;
+            base.EditScale(scale);
+        }
+        #endregion
     }
 }

@@ -68,7 +68,6 @@ namespace Svg
 		}
 
 
-
         /// <summary>
         /// Gets the bounds of the element.
         /// </summary>
@@ -170,7 +169,6 @@ namespace Svg
             return ms;
         }
 
-
 		public override SvgElement DeepCopy()
 		{
 			return DeepCopy<SvgImage>();
@@ -186,5 +184,22 @@ namespace Svg
 			newObj.Href = this.Href;
 			return newObj;
 		}
+
+        #region Edits
+        public override void EditOffset(float dx, float dy)
+        {
+            X += dx;
+            Y += dy;
+            base.EditOffset(dx, dy);
+        }
+        public override void EditScale(float scale)
+        {
+            X *= scale;
+            Y *= scale;
+            Width *= scale;
+            Height *= scale;
+            base.EditScale(scale);
+        }
+        #endregion
     }
 }

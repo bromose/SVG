@@ -35,9 +35,22 @@ namespace Svg.Pathing
 
         public abstract void AddToPath(GraphicsPath graphicsPath);
 
-		public SvgPathSegment Clone()
-		{
-			return this.MemberwiseClone() as SvgPathSegment;
-		}
+        public SvgPathSegment Clone()
+        {
+            return this.MemberwiseClone() as SvgPathSegment;
+        }
+
+        #region Edits
+        public virtual void EditOffset(float dx, float dy)
+        {
+            SvgBuilder.EditOffset(ref _start, dx, dy);
+            SvgBuilder.EditOffset(ref _end, dx, dy);
+        }
+        public virtual void EditScale(float scale)
+        {
+            SvgBuilder.EditScale(ref _start, scale);
+            SvgBuilder.EditScale(ref _end, scale);
+        }
+        #endregion
     }
 }

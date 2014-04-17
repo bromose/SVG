@@ -39,5 +39,21 @@ namespace Svg.Pathing
         {
         	return "C" + this.FirstControlPoint.ToSvgString() + " " + this.SecondControlPoint.ToSvgString() + " " + this.End.ToSvgString();
         }
+
+        #region Edits
+        public override void EditOffset(float dx, float dy)
+        {
+            SvgBuilder.EditOffset(ref _firstControlPoint, dx, dy);
+            SvgBuilder.EditOffset(ref _secondControlPoint, dx, dy);
+            base.EditOffset(dx, dy);
+        }
+
+        public override void EditScale(float scale)
+        {
+            SvgBuilder.EditScale(ref _firstControlPoint, scale);
+            SvgBuilder.EditScale(ref _secondControlPoint, scale);
+            base.EditScale(scale);
+        }
+        #endregion
     }
 }

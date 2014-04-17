@@ -169,7 +169,6 @@ namespace Svg
 			}
 		}
 
-
 		public override SvgElement DeepCopy()
 		{
 			return DeepCopy<SvgPath>();
@@ -187,8 +186,19 @@ namespace Svg
 
 		}
 
-
-
-
+        #region Edits
+        public override void EditOffset(float dx, float dy)
+        {
+            PathData.Offset(dx, dy);
+            IsPathDirty = true;
+            base.EditOffset(dx, dy);
+        }
+        public override void EditScale(float scale)
+        {
+            PathData.Scale(scale);
+            IsPathDirty = true;
+            base.EditScale(scale);
+        }
+        #endregion
     }
 }

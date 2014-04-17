@@ -292,6 +292,23 @@ namespace Svg
 			newObj.X = this.X;
 			newObj.Y = this.Y;
 			return newObj;
-		}
+        }
+
+        #region Edits
+        public override void EditOffset(float dx, float dy)
+        {
+            X += dx;
+            Y += dy;
+            base.EditOffset(dx, dy);
+        }
+        public override void EditScale(float scale)
+        {
+            X *= scale;
+            Y *= scale;
+            Width *= scale;
+            Height *= scale;
+            base.EditScale(scale);
+        }
+        #endregion
     }
 }

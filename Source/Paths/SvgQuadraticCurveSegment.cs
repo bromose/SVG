@@ -38,21 +38,33 @@ namespace Svg.Pathing
         }
 
         public SvgQuadraticCurveSegment(PointF start, PointF controlPoint, PointF end)
+            : base(start, end)
         {
-            this.Start = start;
             this._controlPoint = controlPoint;
-            this.End = end;
         }
 
         public override void AddToPath(System.Drawing.Drawing2D.GraphicsPath graphicsPath)
         {
             graphicsPath.AddBezier(this.Start, this.FirstControlPoint, this.SecondControlPoint, this.End);
         }
-        
-        public override string ToString()
-		{
-			return "Q" + this.ControlPoint.ToSvgString() + " " + this.End.ToSvgString();
-		}
 
+        public override string ToString()
+        {
+            return "Q" + this.ControlPoint.ToSvgString() + " " + this.End.ToSvgString();
+        }
+
+        #region Edits
+        public override void EditOffset(float dx, float dy)
+        {
+            SvgBuilder.EditOffset(ref _controlPoint, dx, dy);
+            base.EditOffset(dx, dy);
+        }
+
+        public override void EditScale(float scale)
+        {
+            SvgBuilder.EditScale(ref _controlPoint, scale);
+            base.EditScale(scale);
+        }
+        #endregion
     }
 }

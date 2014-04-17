@@ -140,7 +140,6 @@ namespace Svg
             CenterY = new SvgUnit(0.0f);
         }
 
-
 		public override SvgElement DeepCopy()
 		{
 			return DeepCopy<SvgCircle>();
@@ -154,5 +153,21 @@ namespace Svg
 			newObj.Radius = this.Radius;
 			return newObj;
 		}
+
+        #region Edits
+        public override void EditOffset(float dx, float dy)
+        {
+            CenterX += dx;
+            CenterY += dy;
+            base.EditOffset(dx, dy);
+        }
+        public override void EditScale(float scale)
+        {
+            CenterX *= scale;
+            CenterY *= scale;
+            Radius *= scale;
+            base.EditScale(scale);
+        }
+        #endregion
     }
 }

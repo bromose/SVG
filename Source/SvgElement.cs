@@ -928,6 +928,18 @@ namespace Svg
                 m_builder = value;
             }
         }
+
+        public virtual void EditOffset(float dx, float dy)
+        {
+            foreach (var child in Children)
+                child.EditOffset(dx, dy);
+        }
+
+        public virtual void EditScale(float scale)
+        {
+            foreach (var child in Children)
+                child.EditScale(scale);
+        }
     }
 
     public class SVGArg : EventArgs

@@ -136,5 +136,24 @@ namespace Svg
 			return newObj;
 		}
 
+        #region Edits
+        public override void EditOffset(float dx, float dy)
+        {
+            StartX += dx;
+            StartY += dy;
+            EndX += dx;
+            EndY += dy;
+            base.EditOffset(dx, dy);
+        }
+        public override void EditScale(float scale)
+        {
+            StartX *= scale;
+            StartY *= scale;
+            EndX *= scale;
+            EndY *= scale;
+            base.EditScale(scale);
+        }
+        #endregion
+
     }
 }
