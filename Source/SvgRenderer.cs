@@ -15,7 +15,7 @@ namespace Svg
         /// <summary>
         /// Initializes a new instance of the <see cref="SvgRenderer"/> class.
         /// </summary>
-        private SvgRenderer()
+        protected SvgRenderer()
         {
         }
 
