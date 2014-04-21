@@ -8,7 +8,7 @@ using System.Drawing.Text;
 
 namespace Svg
 {
-    public sealed class SvgRenderer : IDisposable
+    public class SvgRenderer : IDisposable
     {
         private Graphics _innerGraphics;
 
@@ -19,7 +19,7 @@ namespace Svg
         {
         }
 
-        public Region Clip
+        public virtual Region Clip
         {
             get { return this._innerGraphics.Clip; }
             set { this._innerGraphics.Clip = value; }
@@ -47,32 +47,32 @@ namespace Svg
             return renderer;
         }
 
-        public void DrawImageUnscaled(Image image, Point location)
+        public virtual void DrawImageUnscaled(Image image, Point location)
         {
             this._innerGraphics.DrawImageUnscaled(image, location);
         }
 
-        public void DrawImage(Image image, RectangleF destRect, RectangleF srcRect, GraphicsUnit graphicsUnit)
+        public virtual void DrawImage(Image image, RectangleF destRect, RectangleF srcRect, GraphicsUnit graphicsUnit)
         {
             _innerGraphics.DrawImage(image, destRect, srcRect, graphicsUnit);
         }
 
-        public void SetClip(Region region)
+        public virtual void SetClip(Region region)
         {
             this._innerGraphics.SetClip(region, CombineMode.Complement);
         }
 
-        public void FillPath(Brush brush, GraphicsPath path)
+        public virtual void FillPath(Brush brush, GraphicsPath path)
         {
             this._innerGraphics.FillPath(brush, path);
         }
 
-        public void DrawPath(Pen pen, GraphicsPath path)
+        public virtual void DrawPath(Pen pen, GraphicsPath path)
         {
             this._innerGraphics.DrawPath(pen, path);
         }
 
-        public void TranslateTransform(float dx, float dy, MatrixOrder order)
+        public virtual void TranslateTransform(float dx, float dy, MatrixOrder order)
         {
             this._innerGraphics.TranslateTransform(dx, dy, order);
         }
@@ -82,7 +82,7 @@ namespace Svg
             this.TranslateTransform(dx, dy, MatrixOrder.Append);
         }
 
-        public void ScaleTransform(float sx, float sy, MatrixOrder order)
+        public virtual void ScaleTransform(float sx, float sy, MatrixOrder order)
         {
             this._innerGraphics.ScaleTransform(sx, sy, order);
         }
@@ -92,53 +92,58 @@ namespace Svg
             this.ScaleTransform(sx, sy, MatrixOrder.Append);
         }
 
-        public SmoothingMode SmoothingMode
+        public virtual SmoothingMode SmoothingMode
         {
             get { return this._innerGraphics.SmoothingMode; }
             set { this._innerGraphics.SmoothingMode = value; }
         }
 
-        public PixelOffsetMode PixelOffsetMode
+        public virtual PixelOffsetMode PixelOffsetMode
         {
             get { return this._innerGraphics.PixelOffsetMode; }
             set { this._innerGraphics.PixelOffsetMode = value; }
         }
 
-        public CompositingQuality CompositingQuality
+        public virtual CompositingQuality CompositingQuality
         {
             get { return this._innerGraphics.CompositingQuality; }
             set { this._innerGraphics.CompositingQuality = value; }
         }
 
-        public TextRenderingHint TextRenderingHint
+        public virtual TextRenderingHint TextRenderingHint
         {
             get { return this._innerGraphics.TextRenderingHint; }
             set { this._innerGraphics.TextRenderingHint = value; }
         }
 
-        public int TextContrast
+        public virtual int TextContrast
         {
             get { return this._innerGraphics.TextContrast; }
             set { this._innerGraphics.TextContrast = value; }
         }
 
-        public Matrix Transform
+        public virtual Matrix Transform
         {
             get { return this._innerGraphics.Transform; }
             set { this._innerGraphics.Transform = value; }
         }
 
-        public void Save()
+        public virtual void Save()
         {
             this._innerGraphics.Save();
         }
 
         public void Dispose()
         {
+            Dispose(true);
+        }
+
+        public virtual void Dispose(bool disposing)
+        {
             this._innerGraphics.Dispose();
         }
         
-        public SizeF MeasureString(string text, Font font)
+        public virtual SizeF MeasureString(string text, Font font)
         {
         	var ff = font.FontFamily;
         	float lineSpace = ff.GetLineSpacing(font.Style);

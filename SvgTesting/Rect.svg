@@ -1,7 +1,9 @@
-<svg width="1080" height="959.9999999999999" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+<svg width="4in" height="4in" xmlns="http://www.w3.org/2000/svg" 
+     xmlns:svg="http://www.w3.org/2000/svg"
+     viewBox="0 0 4in 4in">
  <g>
   <title>Layer 1</title>
-  <rect height="96.6102" width="120.339" y="38.7458" x="46.7797" stroke="#000000" fill="transparent" id="svg_1"/>
+  <rect height="1in" width="2in" y="3.2in" x="46.7797" stroke="#000000" fill="transparent" id="svg_1"/>
   <rect height="108.475" width="111.864" y="70.9492" x="95.9322" stroke="#92cff5" fill="transparent" id="svg_2"/>
   <rect height="30.875" width="43.125" y="38.9937" x="168.184" stroke="#a0db8e" fill="transparent" id="svg_3"/>
  </g>
