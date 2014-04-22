@@ -73,6 +73,7 @@
     <Content Include="Rect.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Design Contest-306654A-Front Center.svg" />
     <None Include="Resources\Basic Shapes.svg" />
   </ItemGroup>
   <ItemGroup>

@@ -36,8 +36,9 @@ namespace Svg
         static SvgText()
         {
             Bitmap bitmap = new Bitmap(1, 1);
-            _stringMeasure = SvgRenderer.FromImage(bitmap);
-            _stringMeasure.TextRenderingHint = TextRenderingHint.AntiAlias;
+            var graphics = Graphics.FromImage(bitmap);
+            graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+            _stringMeasure = SvgRenderer.FromGraphics(graphics);
         }
 
         /// <summary>

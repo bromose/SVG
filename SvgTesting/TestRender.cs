@@ -59,5 +59,13 @@ namespace Svg
                 }
             }
         }
+
+        [TestMethod]
+        public void TestRenderWImage()
+        {
+            var builder = new SvgBuilder();
+            var doc = builder.Open(new MemoryStream(TestingSources.WithImage));
+            SaveBitmap(doc.Draw(), "TestRenderWImage.png");
+        }
     }
 }

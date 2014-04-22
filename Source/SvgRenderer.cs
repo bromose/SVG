@@ -57,7 +57,7 @@ namespace Svg
             _innerGraphics.DrawImage(image, destRect, srcRect, graphicsUnit);
         }
 
-        public virtual void SetClip(Region region)
+        public void SetClip(Region region)
         {
             this._innerGraphics.SetClip(region, CombineMode.Complement);
         }

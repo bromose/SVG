@@ -79,5 +79,15 @@ namespace Svg {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] WithImage {
+            get {
+                object obj = ResourceManager.GetObject("WithImage", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

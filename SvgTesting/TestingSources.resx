@@ -124,4 +124,7 @@
   <data name="NASALIZA" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\NASALIZA.TTF;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="WithImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Design Contest-306654A-Front Center.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
