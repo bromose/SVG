@@ -60,6 +60,15 @@ namespace Svg.Transforms
 
             return transformMatrix;
     	}
+        /// <summary>
+        /// Apply the Matrix from GetMatrix to the given GraphicsPath
+        /// </summary>
+        /// <param name="path"></param>
+        public void Transform(GraphicsPath path)
+        {
+            using (var m = GetMatrix())
+                path.Transform(m);
+        }
 
 		public override bool Equals(object obj)
 		{

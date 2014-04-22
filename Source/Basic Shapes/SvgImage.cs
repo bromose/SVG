@@ -15,9 +15,9 @@ namespace Svg
     public class SvgImage : SvgVisualElement
     {
         /// <summary>
-		/// Initializes a new instance of the <see cref="SvgImage"/> class.
+        /// Initializes a new instance of the <see cref="SvgImage"/> class.
         /// </summary>
-		public SvgImage()
+        public SvgImage()
         {
             Width = new SvgUnit(0.0f);
             Height = new SvgUnit(0.0f);
@@ -31,41 +31,41 @@ namespace Svg
             get { return new SvgPoint(X, Y); }
         }
 
-		[SvgAttribute("x")]
-		public virtual SvgUnit X
-		{
-			get { return this.Attributes.GetAttribute<SvgUnit>("x"); }
-			set { this.Attributes["x"] = value; }
-		}
+        [SvgAttribute("x")]
+        public virtual SvgUnit X
+        {
+            get { return this.Attributes.GetAttribute<SvgUnit>("x"); }
+            set { this.Attributes["x"] = value; }
+        }
 
-		[SvgAttribute("y")]
-		public virtual SvgUnit Y
-		{
-			get { return this.Attributes.GetAttribute<SvgUnit>("y"); }
-			set { this.Attributes["y"] = value; }
-		}
+        [SvgAttribute("y")]
+        public virtual SvgUnit Y
+        {
+            get { return this.Attributes.GetAttribute<SvgUnit>("y"); }
+            set { this.Attributes["y"] = value; }
+        }
 
 
-		[SvgAttribute("width")]
-		public virtual SvgUnit Width
-		{
-			get { return this.Attributes.GetAttribute<SvgUnit>("width"); }
-			set { this.Attributes["width"] = value; }
-		}
+        [SvgAttribute("width")]
+        public virtual SvgUnit Width
+        {
+            get { return this.Attributes.GetAttribute<SvgUnit>("width"); }
+            set { this.Attributes["width"] = value; }
+        }
 
-		[SvgAttribute("height")]
-		public virtual SvgUnit Height
-		{
-			get { return this.Attributes.GetAttribute<SvgUnit>("height"); }
-			set { this.Attributes["height"] = value; }
-		}
+        [SvgAttribute("height")]
+        public virtual SvgUnit Height
+        {
+            get { return this.Attributes.GetAttribute<SvgUnit>("height"); }
+            set { this.Attributes["height"] = value; }
+        }
 
-		[SvgAttribute("href", SvgAttributeAttribute.XLinkNamespace)]
-		public virtual SvgUri Href
-		{
-			get { return this.Attributes.GetAttribute<SvgUri>("href"); }
-			set { this.Attributes["href"] = value; }
-		}
+        [SvgAttribute("href", SvgAttributeAttribute.XLinkNamespace)]
+        public virtual SvgUri Href
+        {
+            get { return this.Attributes.GetAttribute<SvgUri>("href"); }
+            set { this.Attributes["href"] = value; }
+        }
 
 
         /// <summary>
@@ -74,7 +74,14 @@ namespace Svg
         /// <value>The bounds.</value>
         public override RectangleF Bounds
         {
-			get { return new RectangleF(this.Location.ToDeviceValue(), new SizeF(this.Width, this.Height)); }
+            get
+            {
+                using (var path = Path)
+                {
+                    // TODO: this path could be clipped.  Need a Graphics object for that though
+                    return path.GetBounds();
+                }
+            }
         }
 
         /// <summary>
@@ -84,7 +91,10 @@ namespace Svg
         {
             get
             {
-				return null;
+                // this was returning null, but since we override render we can use this path to get bounds
+                var path = new GraphicsPath();
+                path.AddRectangle(new RectangleF(Location.ToDeviceValue(), new SizeF(Width.ToDeviceValue(), Height.ToDeviceValue())));
+                return path;
             }
             protected set
             {
@@ -149,21 +159,21 @@ namespace Svg
             return ms;
         }
 
-		public override SvgElement DeepCopy()
-		{
-			return DeepCopy<SvgImage>();
-		}
+        public override SvgElement DeepCopy()
+        {
+            return DeepCopy<SvgImage>();
+        }
 
-		public override SvgElement DeepCopy<T>()
-		{
- 			var newObj = base.DeepCopy<T>() as SvgImage;
-			newObj.Height = this.Height;
-			newObj.Width = this.Width;
-			newObj.X = this.X;
-			newObj.Y = this.Y;
-			newObj.Href = this.Href;
-			return newObj;
-		}
+        public override SvgElement DeepCopy<T>()
+        {
+            var newObj = base.DeepCopy<T>() as SvgImage;
+            newObj.Height = this.Height;
+            newObj.Width = this.Width;
+            newObj.X = this.X;
+            newObj.Y = this.Y;
+            newObj.Href = this.Href;
+            return newObj;
+        }
 
         #region Edits
         public override void EditOffset(float dx, float dy)

@@ -606,8 +606,7 @@ namespace Svg
                         if (childPath != null)
                         {
                             childPath = (GraphicsPath)childPath.Clone();
-                            childPath.Transform(adjust.GetMatrix());
-
+                            adjust.Transform(childPath);
                             path.AddPath(childPath, false);
                         }
                     }

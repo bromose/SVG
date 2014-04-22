@@ -61,15 +61,15 @@ namespace Svg
             set { this.Attributes["clip-rule"] = value; }
         }
 
-		/// <summary>
-		/// Gets the associated <see cref="SvgClipPath"/> if one has been specified.
-		/// </summary>
-		[SvgAttribute("filter")]
-		public virtual Uri Filter
-		{
-			get { return this.Attributes.GetAttribute<Uri>("filter"); }
-			set { this.Attributes["filter"] = value; }
-		}
+        /// <summary>
+        /// Gets the associated <see cref="SvgClipPath"/> if one has been specified.
+        /// </summary>
+        [SvgAttribute("filter")]
+        public virtual Uri Filter
+        {
+            get { return this.Attributes.GetAttribute<Uri>("filter"); }
+            set { this.Attributes["filter"] = value; }
+        }
 
         /// <summary>
         /// Gets or sets a value to determine if anti-aliasing should occur when the element is being rendered.
@@ -131,7 +131,7 @@ namespace Svg
                 {
                     if (brush != null)
                     {
-                    	this.Path.FillMode = this.FillRule == SvgFillRule.NonZero ? FillMode.Winding : FillMode.Alternate;
+                        this.Path.FillMode = this.FillRule == SvgFillRule.NonZero ? FillMode.Winding : FillMode.Alternate;
                         renderer.FillPath(brush, this.Path);
                     }
                 }
@@ -152,7 +152,7 @@ namespace Svg
                     if (this.StrokeDashArray != null && this.StrokeDashArray.Count > 0)
                     {
                         /* divide by stroke width - GDI behaviour that I don't quite understand yet.*/
-                        pen.DashPattern = this.StrokeDashArray.ConvertAll(u => u.Value/((strokeWidth <= 0) ? 1 : strokeWidth)).ToArray();
+                        pen.DashPattern = this.StrokeDashArray.ConvertAll(u => u.Value / ((strokeWidth <= 0) ? 1 : strokeWidth)).ToArray();
                     }
 
                     renderer.DrawPath(pen, this.Path);
@@ -166,9 +166,9 @@ namespace Svg
         /// <param name="renderer">The <see cref="SvgRenderer"/> to have its clipping region set.</param>
         protected internal virtual void SetClip(SvgRenderer renderer)
         {
-            if (this.ClipPath != null)
+            SvgClipPath clipPath = GetSvgClipPath();
+            if (clipPath != null)
             {
-                SvgClipPath clipPath = this.OwnerDocument.GetElementById<SvgClipPath>(this.ClipPath.ToString());
                 this._previousClip = renderer.Clip;
 
                 if (clipPath != null)
@@ -176,6 +176,17 @@ namespace Svg
                     renderer.Clip = clipPath.GetClipRegion(this);
                 }
             }
+        }
+        /// <summary>
+        /// Gets the Clip Path if available.  Returns null if not set
+        /// </summary>
+        /// <returns></returns>
+        protected SvgClipPath GetSvgClipPath()
+        {
+            if (ClipPath == null)
+                return null;
+            SvgClipPath clipPath = this.OwnerDocument.GetElementById<SvgClipPath>(this.ClipPath.ToString());
+            return clipPath;
         }
 
         /// <summary>
@@ -209,31 +220,31 @@ namespace Svg
             this.ResetClip(renderer);
         }
 
-		public override SvgElement DeepCopy<T>()
-		{
-			var newObj = base.DeepCopy<T>() as SvgVisualElement;
-			newObj.ClipPath = this.ClipPath;
-			newObj.ClipRule = this.ClipRule;
-			newObj.Filter = this.Filter;
+        public override SvgElement DeepCopy<T>()
+        {
+            var newObj = base.DeepCopy<T>() as SvgVisualElement;
+            newObj.ClipPath = this.ClipPath;
+            newObj.ClipRule = this.ClipRule;
+            newObj.Filter = this.Filter;
 
-			newObj.Visible = this.Visible;
-			if (this.Fill != null)
-				newObj.Fill = this.Fill;
-			if (this.Stroke != null)
-				newObj.Stroke = this.Stroke;
-			newObj.FillRule = this.FillRule;
-			newObj.FillOpacity = this.FillOpacity;
-			newObj.StrokeWidth = this.StrokeWidth;
-			newObj.StrokeLineCap = this.StrokeLineCap;
-			newObj.StrokeLineJoin = this.StrokeLineJoin;
-			newObj.StrokeMiterLimit = this.StrokeMiterLimit;
-			newObj.StrokeDashArray = this.StrokeDashArray;
-			newObj.StrokeDashOffset = this.StrokeDashOffset;
-			newObj.StrokeOpacity = this.StrokeOpacity;
-			newObj.Opacity = this.Opacity;
+            newObj.Visible = this.Visible;
+            if (this.Fill != null)
+                newObj.Fill = this.Fill;
+            if (this.Stroke != null)
+                newObj.Stroke = this.Stroke;
+            newObj.FillRule = this.FillRule;
+            newObj.FillOpacity = this.FillOpacity;
+            newObj.StrokeWidth = this.StrokeWidth;
+            newObj.StrokeLineCap = this.StrokeLineCap;
+            newObj.StrokeLineJoin = this.StrokeLineJoin;
+            newObj.StrokeMiterLimit = this.StrokeMiterLimit;
+            newObj.StrokeDashArray = this.StrokeDashArray;
+            newObj.StrokeDashOffset = this.StrokeDashOffset;
+            newObj.StrokeOpacity = this.StrokeOpacity;
+            newObj.Opacity = this.Opacity;
 
-			return newObj;
-		}
+            return newObj;
+        }
 
     }
 }
