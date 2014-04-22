@@ -18,13 +18,6 @@ namespace Svg
         protected SvgRenderer()
         {
         }
-
-        public virtual Region Clip
-        {
-            get { return this._innerGraphics.Clip; }
-            set { this._innerGraphics.Clip = value; }
-        }
-
         /// <summary>
         /// Creates a new <see cref="SvgRenderer"/> from the specified <see cref="Image"/>.
         /// </summary>
@@ -35,7 +28,6 @@ namespace Svg
             renderer._innerGraphics = Graphics.FromImage(image);
             return renderer;
         }
-
         /// <summary>
         /// Creates a new <see cref="SvgRenderer"/> from the specified <see cref="Graphics"/>.
         /// </summary>
@@ -57,9 +49,15 @@ namespace Svg
             _innerGraphics.DrawImage(image, destRect, srcRect, graphicsUnit);
         }
 
-        public void SetClip(Region region)
+        public virtual void SetClip(Region region)
         {
             this._innerGraphics.SetClip(region, CombineMode.Complement);
+        }
+
+        public virtual Region Clip
+        {
+            get { return this._innerGraphics.Clip; }
+            set { this._innerGraphics.Clip = value; }
         }
 
         public virtual void FillPath(Brush brush, GraphicsPath path)
@@ -133,29 +131,36 @@ namespace Svg
             this._innerGraphics.Save();
         }
 
+        public virtual SizeF MeasureString(string text, Font font)
+        {
+            var ff = font.FontFamily;
+            float lineSpace = ff.GetLineSpacing(font.Style);
+            float ascent = ff.GetCellAscent(font.Style);
+            float baseline = font.GetHeight(this._innerGraphics) * ascent / lineSpace;
+
+            StringFormat format = StringFormat.GenericTypographic;
+            format.SetMeasurableCharacterRanges(new CharacterRange[] { new CharacterRange(0, text.Length) });
+            Region[] r = this._innerGraphics.MeasureCharacterRanges(text, font, new Rectangle(0, 0, 1000, 1000), format);
+            RectangleF rect = r[0].GetBounds(this._innerGraphics);
+
+            return new SizeF(rect.Width, baseline);
+        }
+
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public virtual void Dispose(bool disposing)
         {
-            this._innerGraphics.Dispose();
+            if (_innerGraphics != null)
+                this._innerGraphics.Dispose();
         }
-        
-        public virtual SizeF MeasureString(string text, Font font)
+
+        ~SvgRenderer()
         {
-        	var ff = font.FontFamily;
-        	float lineSpace = ff.GetLineSpacing(font.Style);
-        	float ascent = ff.GetCellAscent(font.Style);
-        	float baseline =  font.GetHeight(this._innerGraphics) * ascent / lineSpace;
-        	
-        	StringFormat format = StringFormat.GenericTypographic;
-        	format.SetMeasurableCharacterRanges(new CharacterRange[]{new CharacterRange(0, text.Length)});
-        	Region[] r = this._innerGraphics.MeasureCharacterRanges(text, font, new Rectangle(0, 0, 1000, 1000), format);
-        	RectangleF rect = r[0].GetBounds(this._innerGraphics);
-        	
-        	return new SizeF(rect.Width, baseline);
+            Dispose(false);
         }
     }
 }
