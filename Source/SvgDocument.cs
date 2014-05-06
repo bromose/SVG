@@ -194,6 +194,16 @@ namespace Svg
             Stream stream = new MemoryStream(UTF8Encoding.Default.GetBytes(document.InnerXml));
             return Open<SvgDocument>(stream, null);
         }
+        /// <summary>
+        /// Given the SVG/XML fragment return a fully populated SVG node.  The returned nodes are not added to this document
+        /// </summary>
+        /// <param name="content">The SVG/XML formatted string to parse</param>
+        /// <param name="entities">Optional dictionary to resolve entities. May be null.</param>
+        /// <returns></returns>
+        public SvgElement[] ParseFragment(string content, Dictionary<string, string> entities)
+        {
+            return SvgBuilder.ParseFragment(this, content, entities);
+        }
 
         public static Bitmap OpenAsBitmap(string path)
         {

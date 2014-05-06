@@ -11,5 +11,12 @@ namespace Svg
         {
             new SvgBuilder().OpenPath("Rect.svg");
         }
+
+        [TestMethod]
+        public void TestParseFragment()
+        {
+            var doc = new SvgDocument();
+            var group = doc.ParseFragment(TestingSources.SvgFragmentGroup, null);
+        }
     }
 }

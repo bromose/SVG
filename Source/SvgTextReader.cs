@@ -22,6 +22,15 @@ namespace Svg
             this._entities = entities;
         }
 
+        public SvgTextReader(string fragment, XmlNodeType type, XmlParserContext context, Dictionary<string, string> entities)
+            : base(fragment, type, context)
+        {
+            XmlResolver = new SvgDtdResolver(); 
+            WhitespaceHandling = WhitespaceHandling.None;
+            EntityHandling = EntityHandling.ExpandCharEntities;
+            _entities = entities;
+        }
+
         /// <summary>
         /// Gets the text value of the current node.
         /// </summary>

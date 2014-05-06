@@ -21,7 +21,7 @@ namespace Svg
         /// <summary>
         /// A list of available types that can be used when creating an <see cref="SvgElement"/>.
         /// </summary>
-        static List<ElementInfo> AvailableElements;
+        static Dictionary<string, ElementInfo> AvailableElements;
         static Dictionary<Type, Dictionary<string, PropertyDescriptorCollection>> _propertyDescriptors = new Dictionary<Type, Dictionary<string, PropertyDescriptorCollection>>();
         readonly Func<SvgDocument> m_ctor;
         readonly Dictionary<string, FontFamily> m_knownFonts;
@@ -31,12 +31,14 @@ namespace Svg
         #region Ctor
         static SvgBuilder()
         {
+            AvailableElements = new Dictionary<string, ElementInfo>();
             var svgTypes = from t in typeof(SvgDocument).Assembly.GetExportedTypes()
                            where t.GetCustomAttributes(typeof(SvgElementAttribute), true).Length > 0
                            && t.IsSubclassOf(typeof(SvgElement))
                            select new ElementInfo { ElementName = ((SvgElementAttribute)t.GetCustomAttributes(typeof(SvgElementAttribute), true)[0]).ElementName, ElementType = t };
-
-            AvailableElements = svgTypes.ToList();
+            foreach (var type in svgTypes)
+                AvailableElements[type.ElementName] = type;
+            AvailableElements["svg"] = new ElementInfo("svg", typeof(SvgDocument));
             Default = new SvgBuilder();
         }
 
@@ -206,6 +208,82 @@ namespace Svg
                 return svgDocument;
             }
         }
+        /// <summary>
+        /// Given the SVG/XML fragment return a fully populated SVG node.  The returned node is not added to the given document
+        /// </summary>
+        /// <param name="document">The document context to parse the in content in</param>
+        /// <param name="content">The SVG/XML formatted string to parse</param>
+        /// <param name="entities">Optional dictionary to resolve entities. May be null.</param>
+        /// <returns></returns>
+        public SvgElement[] ParseFragment(SvgDocument document, string content, Dictionary<string, string> entities)
+        {
+            NameTable nt = new NameTable();
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(nt);
+            nsmgr.AddNamespace("svg", svgNS);
+
+            XmlParserContext context = new XmlParserContext(null, nsmgr, null, XmlSpace.None);
+
+            using (var reader = new SvgTextReader(content, XmlNodeType.Element, context, entities))
+            {
+                var elements = new List<SvgElement>();
+                var elementStack = new Stack<SvgElement>();
+                var value = new StringBuilder();
+                bool elementEmpty;
+                SvgElement element = null;
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            // Does this element have a value or children
+                            // (Must do this check here before we progress to another node)
+                            elementEmpty = reader.IsEmptyElement;
+                            // Create element
+                            element = CreateElement(reader, document);
+
+                            // Add to the parents children
+                            if (elementStack.Count > 0)
+                            {
+                                var parent = elementStack.Peek();
+                                if (parent != null && element != null)
+                                    parent.Children.Add(element);
+                            }
+                            else
+                            {
+                                elements.Add(element);
+                            }
+
+                            // Push element into stack
+                            elementStack.Push(element);
+
+                            // Need to process if the element is empty
+                            if (elementEmpty)
+                            {
+                                goto case XmlNodeType.EndElement;
+                            }
+
+                            break;
+                        case XmlNodeType.EndElement:
+
+                            // Pop the element out of the stack
+                            element = elementStack.Pop();
+
+                            if (value.Length > 0 && element != null)
+                            {
+                                element.Content = value.ToString();
+                                // Reset content value for new element
+                                value.Clear();
+                            }
+                            break;
+                        case XmlNodeType.CDATA:
+                        case XmlNodeType.Text:
+                            value.Append(reader.Value);
+                            break;
+                    }
+                }
+                return elements.ToArray();
+            }
+        }
         #endregion
 
         #region Create Element Methods
@@ -255,31 +333,31 @@ namespace Svg
         {
             SvgElement createdElement = null;
             string elementName = reader.LocalName;
-            string elementNS = reader.NamespaceURI;
+            //string elementNS = reader.NamespaceURI;
 
             //Trace.TraceInformation("Begin CreateElement: {0}", elementName);
-
-            if (elementNS == svgNS)
+            //ARES - this caused fragment parsing to fail, and I can't see a reason to worry about this here since we only create elements from AvailableElements
+            //if (elementNS == svgNS)
+            //{
+            if (elementName == "svg")
             {
-                if (elementName == "svg")
+                createdElement = (fragmentIsDocument) ? CreateDocument() : new SvgFragment();
+            }
+            else
+            {
+                ElementInfo validType;
+                if (AvailableElements.TryGetValue(elementName, out validType) && validType != null)
                 {
-                    createdElement = (fragmentIsDocument) ? CreateDocument() : new SvgFragment();
-                }
-                else
-                {
-                    ElementInfo validType = AvailableElements.SingleOrDefault(e => e.ElementName == elementName);
-                    if (validType != null)
-                    {
-                        createdElement = (SvgElement)Activator.CreateInstance(validType.ElementType);
-                    }
-                }
-
-                if (createdElement != null)
-                {
-                    createdElement.SvgBuilder = this;
-                    SetAttributes(createdElement, reader, document);
+                    createdElement = (SvgElement)Activator.CreateInstance(validType.ElementType);
                 }
             }
+
+            if (createdElement != null)
+            {
+                createdElement.SvgBuilder = this;
+                SetAttributes(createdElement, reader, document);
+            }
+            //}
 
             //Trace.TraceInformation("End CreateElement");
 
