@@ -83,6 +83,21 @@ namespace Svg
         {
             this.AddAndForceUniqueID(item, false, false);
         }
+        /// <summary>
+        /// Add the given SVG/XML document fragment as children of this element
+        /// </summary>
+        /// <param name="fragment">The fragment to parse and add</param>
+        /// <param name="entities">Optional entity lookups</param>
+        /// <param name="autoForceUniqueID">Pass true here, if you want the ID to be fixed</param>
+        /// <param name="logElementOldIDNewID">function called by the id manager when an id is mapped</param>
+        /// <returns>The elements parsed and added as the children of this element</returns>
+        public SvgElement[] Add(string fragment, Dictionary<string, string> entities = null, bool autoForceUniqueID = true, Action<SvgElement, string, string> logElementOldIDNewID = null)
+        {
+            var elements = _owner.OwnerDocument.ParseFragment(fragment, entities);
+            foreach (var element in elements)
+                AddAndForceUniqueID(element, autoForceUniqueID, autoForceUniqueID, logElementOldIDNewID);
+            return elements;
+        }
 
         public void AddAndForceUniqueID(SvgElement item, bool autoForceUniqueID = true, bool autoFixChildrenID = true, Action<SvgElement, string, string> logElementOldIDNewID = null)
         {

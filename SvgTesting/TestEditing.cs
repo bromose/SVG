@@ -23,5 +23,16 @@ namespace Svg
             doc.EditScale(2);
             SaveBitmap(doc.Draw(), "after.png");
         }
+        [TestMethod]
+        public void TestAddingPath()
+        {
+            var doc = new SvgDocument();
+            var elements = doc.ParseFragment(TestingSources.SvgFragmentGroup);
+            var epath = (SvgPath)elements[0].Children[0];
+            var path = new SvgPath();
+            doc.Children.Add(path);
+            path.PathData.Add(epath.Path);
+            SaveText(doc.ToString(), "PathDataAddPath.svg");
+        }
     }
 }

@@ -197,12 +197,12 @@ namespace Svg
         /// <summary>
         /// Given the SVG/XML fragment return a fully populated SVG node.  The returned nodes are not added to this document
         /// </summary>
-        /// <param name="content">The SVG/XML formatted string to parse</param>
+        /// <param name="fragment">The SVG/XML formatted string to parse</param>
         /// <param name="entities">Optional dictionary to resolve entities. May be null.</param>
         /// <returns></returns>
-        public SvgElement[] ParseFragment(string content, Dictionary<string, string> entities)
+        public SvgElement[] ParseFragment(string fragment, Dictionary<string, string> entities = null)
         {
-            return SvgBuilder.ParseFragment(this, content, entities);
+            return SvgBuilder.ParseFragment(this, fragment, entities);
         }
 
         public static Bitmap OpenAsBitmap(string path)

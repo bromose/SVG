@@ -94,5 +94,11 @@ namespace Svg
         	
         	action(elem);
         }
+
+        public static bool ContainsMask(this byte a, byte b)
+        {
+            return ((a & b) == b);
+        }
+
     }
 }

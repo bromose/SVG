@@ -2,6 +2,8 @@ using System;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing.Drawing2D;
+using System.Drawing;
 
 namespace Svg.Pathing
 {
@@ -18,7 +20,7 @@ namespace Svg.Pathing
 
         public SvgPathSegment Last
         {
-            get { return this._segments[this._segments.Count-1]; }
+            get { return this._segments[this._segments.Count - 1]; }
         }
 
         public int IndexOf(SvgPathSegment item)
@@ -56,6 +58,47 @@ namespace Svg.Pathing
             if (this._owner != null)
             {
                 this._owner.OnPathUpdated();
+            }
+        }
+
+        public void Add(GraphicsPath path)
+        {
+            var pathData = path.PathData;
+            for (int i = 0; i < pathData.Types.Length; i++)
+            {
+                PointF last = i > 0 ? pathData.Points[i - 1] : pathData.Points[0];
+                PointF pt = pathData.Points[i];
+                byte bType = pathData.Types[i];
+                if (bType == 0)
+                {
+                    //buffer.Append("M").Append(pt.X.ToString("#.000")).Append(",").Append(pt.Y.ToString("#.000")).Append(" ");
+                    _segments.Add(new SvgMoveToSegment(pt));
+                }
+                if (bType.ContainsMask((byte)PathPointType.Bezier))
+                {
+                    PointF pt1 = pathData.Points[++i];
+                    if (pathData.Types.Length > i + 1 && pathData.Types[i + 1].ContainsMask((byte)PathPointType.Bezier3))
+                    {
+                        PointF pt2 = pathData.Points[++i];
+                        //buffer.Append("C").Append(pt.X.ToString("#.000")).Append(",").Append(pt.Y.ToString("#.000")).Append(" ").Append(pt1.X.ToString("#.000")).Append(",").Append(pt1.Y.ToString("#.000")).Append(" ").Append(pt2.X.ToString("#.000")).Append(",").Append(pt2.Y.ToString("#.000")).Append(" ");
+                        _segments.Add(new SvgCubicCurveSegment(last, pt, pt1, pt2));
+                    }
+                    else
+                    {
+                        //buffer.Append("Q").Append(pt.X.ToString("#.000")).Append(",").Append(pt.Y.ToString("#.000")).Append(" ").Append(pt1.X.ToString("#.000")).Append(",").Append(pt1.Y.ToString("#.000")).Append(" ");
+                        _segments.Add(new SvgQuadraticCurveSegment(last, pt, pt1));
+                    }
+                }
+                else if (bType.ContainsMask((byte)PathPointType.Line))
+                {
+                    //buffer.Append("L").Append(pt.X.ToString("#.000")).Append(",").Append(pt.Y.ToString("#.000")).Append(" ");
+                    _segments.Add(new SvgLineSegment(last, pt));
+                }
+                if (bType.ContainsMask((byte)PathPointType.CloseSubpath))
+                {
+                    //buffer.Append("z");
+                    _segments.Add(new SvgClosePathSegment());
+                }
             }
         }
 

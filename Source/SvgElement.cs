@@ -9,6 +9,7 @@ using Svg.Transforms;
 using System.Reflection;
 using System.Threading;
 using System.Globalization;
+using System.Text;
 
 namespace Svg
 {
@@ -938,6 +939,18 @@ namespace Svg
         {
             foreach (var child in Children)
                 child.EditScale(scale);
+        }
+        /// <summary>
+        /// Gets the textual representation of this element which is equivalent to the output of WriteElement
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            using (var text = new System.IO.StringWriter(sb))
+            using (var writer = new XmlTextWriter(text))
+                WriteElement(writer);
+            return sb.ToString();
         }
     }
 

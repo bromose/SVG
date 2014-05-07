@@ -212,10 +212,10 @@ namespace Svg
         /// Given the SVG/XML fragment return a fully populated SVG node.  The returned node is not added to the given document
         /// </summary>
         /// <param name="document">The document context to parse the in content in</param>
-        /// <param name="content">The SVG/XML formatted string to parse</param>
+        /// <param name="fragment">The SVG/XML formatted string to parse</param>
         /// <param name="entities">Optional dictionary to resolve entities. May be null.</param>
         /// <returns></returns>
-        public SvgElement[] ParseFragment(SvgDocument document, string content, Dictionary<string, string> entities)
+        public SvgElement[] ParseFragment(SvgDocument document, string fragment, Dictionary<string, string> entities)
         {
             NameTable nt = new NameTable();
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(nt);
@@ -223,7 +223,7 @@ namespace Svg
 
             XmlParserContext context = new XmlParserContext(null, nsmgr, null, XmlSpace.None);
 
-            using (var reader = new SvgTextReader(content, XmlNodeType.Element, context, entities))
+            using (var reader = new SvgTextReader(fragment, XmlNodeType.Element, context, entities))
             {
                 var elements = new List<SvgElement>();
                 var elementStack = new Stack<SvgElement>();

@@ -21,5 +21,13 @@ namespace Svg
             TestContext.AddResultFile(saveto);
             return saveto;
         }
+
+        public string SaveText(string text, string name)
+        {
+            string saveto = Path.Combine(TestContext.ResultsDirectory, name);
+            File.WriteAllText(saveto, text);
+            TestContext.AddResultFile(saveto);
+            return saveto;
+        }
     }
 }
