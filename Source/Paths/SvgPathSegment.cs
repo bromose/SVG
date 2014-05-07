@@ -6,6 +6,9 @@ using System.Drawing.Drawing2D;
 
 namespace Svg.Pathing
 {
+    /// <summary>
+    /// The base class for path segments in an SvgPathSegmentList
+    /// </summary>
     public abstract class SvgPathSegment
     {
         private PointF _start;
