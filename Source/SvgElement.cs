@@ -952,6 +952,19 @@ namespace Svg
                 WriteElement(writer);
             return sb.ToString();
         }
+        /// <summary>
+        /// Enumerates through all child, grandchild, and beyond elements
+        /// </summary>
+        /// <returns>An enumerable through all child elements</returns>
+        public IEnumerable<SvgElement> AllChildren()
+        {
+            foreach (var child in Children)
+            {
+                yield return child;
+                foreach (var next in child.AllChildren())
+                    yield return next;
+            }
+        }
     }
 
     public class SVGArg : EventArgs

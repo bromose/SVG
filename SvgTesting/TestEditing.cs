@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
+using System.Linq;
 
 namespace Svg
 {
@@ -33,6 +34,13 @@ namespace Svg
             doc.Children.Add(path);
             path.PathData.Add(epath.Path);
             SaveText(doc.ToString(), "PathDataAddPath.svg");
+        }
+        [TestMethod]
+        public void TestAllChildren()
+        {
+            var doc = new SvgBuilder().Open(Encoding.UTF8.GetString(TestingSources.Basic_Shapes));
+            Assert.AreEqual(1, doc.Children.Count);
+            Assert.AreEqual(7, doc.AllChildren().Count());
         }
     }
 }
