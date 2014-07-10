@@ -604,7 +604,7 @@ namespace Svg
                     {
                         var childPath = ((SvgVisualElement)child).Path;
 
-                        if (childPath != null)
+                        if (childPath != null && childPath.PointCount > 0)
                         {
                             childPath = (GraphicsPath)childPath.Clone();
                             adjust.Transform(childPath);

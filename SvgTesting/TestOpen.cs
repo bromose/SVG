@@ -25,5 +25,10 @@ namespace Svg
             var group = doc.Children.Add(TestingSources.SvgFragmentGroup);
             SaveText(doc.ToString(), "ParseAddFragment.svg");
         }
+        [TestMethod]
+        public void TestEmptyPath()
+        {
+            var b = new SvgBuilder().Open(TestingSources.SvgEmptyPath).Bounds;
+        }
     }
 }

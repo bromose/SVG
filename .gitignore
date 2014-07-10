@@ -4,3 +4,9 @@ Source/obj/
 Source/Svg.csproj.user
 Source/Svg.suo
 Source/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Nuget
+/SvgTesting/obj
+/SvgTesting/bin
+/Source/Svg.nuspec
+TestResults
+/Source/Svg.v12.suo

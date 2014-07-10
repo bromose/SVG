@@ -81,6 +81,20 @@ namespace Svg {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;svg width=&quot;15in&quot; height=&quot;19in&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:svg=&quot;http://www.w3.org/2000/svg&quot;&gt;
+        /// &lt;g&gt;
+        ///  &lt;title&gt;Layer 1&lt;/title&gt;
+        ///  &lt;g id=&quot;svg_9&quot; data-markup=&quot;{&amp;quot;Text&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;Vectors&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;TextOption&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;FontId&amp;quot;:&amp;quot;245&amp;quot;,&amp;quot;FontSize&amp;quot;:300,&amp;quot;CustomOption&amp;quot;:&amp;quot;&amp;quot;}&quot; transform=&quot;rotate(19.73335075378418 722.2650146484377,531.0059814453125) &quot;&gt;
+        ///   &lt;path id=&quot;svg_10&quot; data-targe [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SvgEmptyPath {
+            get {
+                return ResourceManager.GetString("SvgEmptyPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;g&gt;
         ///&lt;path fill=&quot;#000000&quot; d=&quot;M102.937,32.635 C103.427,32.635 103.916,32.635 104.406,32.635 C105.795,32.717 107.245,32.831 108.679,32.969 C110.081,33.105 111.609,33.079 112.817,33.503 C113.815,33.853 114.951,35.040 115.955,35.840 C123.090,41.526 129.290,48.625 133.579,56.735 C129.501,55.917 125.209,55.313 120.895,54.732 C116.812,45.485 110.647,38.322 102.938,32.702 C102.937,32.680 102.937,32.658 102.937,32.635 M115.021,54.131 C91.203,51.901 66.796,54.653 48.131,60.006 C48.050,59.734 48.329,59.516 48.465,59.3 [rest of string was truncated]&quot;;.
         /// </summary>
