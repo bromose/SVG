@@ -304,6 +304,18 @@ namespace Svg
         protected virtual void AddElement(SvgElement child, int index)
         {
         }
+        /// <summary>
+        /// Add a child element to the Children collection and then return
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="child"></param>
+        /// <returns></returns>
+        public T Add<T>(T child)
+            where T: SvgElement
+        {
+            Children.Add(child);
+            return child;
+        }
 
         /// <summary>
         /// Fired when an Element was added to the children of this Element

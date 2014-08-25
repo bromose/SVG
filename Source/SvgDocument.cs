@@ -318,14 +318,12 @@ namespace Svg
         public void Write(Stream stream)
         {
 
-            var xmlWriter = new XmlTextWriter(stream, Encoding.UTF8);
-            xmlWriter.Formatting = Formatting.Indented;
-
-            xmlWriter.WriteDocType("svg", "-//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd", null);
-
-            this.WriteElement(xmlWriter);
-
-            xmlWriter.Flush();
+            using (var xmlWriter = new XmlTextWriter(stream, Encoding.UTF8) { Formatting = Formatting.Indented })
+            {
+                WriteDocType(xmlWriter);
+                this.WriteElement(xmlWriter);
+                xmlWriter.Flush();
+            }
         }
 
         public void Write(string path)
@@ -334,6 +332,24 @@ namespace Svg
             {
                 this.Write(fs);
             }
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            using (var text = new System.IO.StringWriter())
+            using (var xmlWriter = new XmlTextWriter(text) { Formatting = Formatting.Indented })
+            {
+                WriteDocType(xmlWriter);
+                this.WriteElement(xmlWriter);
+                xmlWriter.Flush();
+                return text.GetStringBuilder().ToString();
+            }
+        }
+
+        private static void WriteDocType(XmlTextWriter xmlWriter)
+        {
+            xmlWriter.WriteDocType("svg", "-//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd", null);
         }
     }
 }

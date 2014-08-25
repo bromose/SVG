@@ -13,10 +13,15 @@ namespace Svg
     /// An element used to group SVG shapes.
     /// </summary>
     [SvgElement("g")]
-    public class SvgGroup : SvgVisualElement
+    public sealed class SvgGroup : SvgVisualElement
     {
         public SvgGroup()
         {
+        }
+
+        public SvgGroup(SvgElementCollection container)
+        {
+            container.Add(this);
         }
 
         /// <summary>

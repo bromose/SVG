@@ -74,7 +74,7 @@
     </CodeAnalysisRules>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <DebugSymbols>false</DebugSymbols>
-    <DocumentationFile>bin\Release\Svg.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Svg.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
