@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -8,6 +9,7 @@ namespace Svg
     /// <summary>
     /// Defines the various coordinate units certain SVG elements may use.
     /// </summary>
+    [TypeConverter(typeof(EnumBaseConverter<SvgCoordinateUnits>))]
     public enum SvgCoordinateUnits
     {
         /// <summary>

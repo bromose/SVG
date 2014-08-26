@@ -311,7 +311,7 @@ namespace Svg
         /// <param name="child"></param>
         /// <returns></returns>
         public T Add<T>(T child)
-            where T: SvgElement
+            where T : SvgElement
         {
             Children.Add(child);
             return child;
@@ -645,26 +645,26 @@ namespace Svg
                     if (!(child is SvgGroup))
                     {
                         var childPath = ((SvgVisualElement)child).Path;
-
-                        if (childPath != null)
+                        if (childPath == null || childPath.PointCount == 0)
+                            continue;
+                        using (var next = (GraphicsPath)childPath.Clone())
                         {
-                            childPath = (GraphicsPath)childPath.Clone();
-                            if (child.Transforms != null)
-                                childPath.Transform(child.Transforms.GetMatrix());
-
-                            ret.AddPath(childPath, false);
+                            var transform = child.Transforms;
+                            if (transform != null && transform.Count > 0)
+                                using (var m = transform.GetMatrix())
+                                    next.Transform(m);
+                            ret.AddPath(next, false);
                         }
                     }
                     else
                     {
                         var childPath = GetPaths(child);
                         if (child.Transforms != null)
-                            childPath.Transform(child.Transforms.GetMatrix());
+                            using (var m = child.Transforms.GetMatrix())
+                                childPath.Transform(m);
                     }
                 }
-
             }
-
             return ret;
         }
 

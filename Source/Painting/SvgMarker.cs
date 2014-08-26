@@ -45,11 +45,11 @@ namespace Svg
 		}
 
 
-		[SvgAttribute("viewBox")]
+		[SvgAttribute("viewbox")]
 		public virtual SvgViewBox ViewBox
 		{
-			get { return this.Attributes.GetAttribute<SvgViewBox>("viewBox"); }
-			set { this.Attributes["viewBox"] = value; }
+			get { return this.Attributes.GetAttribute<SvgViewBox>("viewbox"); }
+			set { this.Attributes["viewbox"] = value; }
 		}
 
 

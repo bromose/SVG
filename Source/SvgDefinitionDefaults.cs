@@ -15,11 +15,11 @@ namespace Svg
 
         static SvgDefaults()
         {
-            _defaults["viewBox"] = "0, 0, 0, 0";
+            _defaults["viewbox"] = "0, 0, 0, 0";
 
             _defaults["visibility"] = "visible";
             _defaults["opacity"] = "1";
-            _defaults["clip-rule"] = "nonzero";
+            _defaults["clip-rule"] = "nonZero";
 
             _defaults["transform"] = "";
             _defaults["rx"] = "0";
@@ -29,7 +29,7 @@ namespace Svg
 
             _defaults["fill"] = "";
             _defaults["fill-opacity"] = "1";
-            _defaults["fill-rule"] = "nonzero";
+            _defaults["fill-rule"] = "nonZero";
 
             _defaults["stroke"] = "none";
             _defaults["stroke-opacity"] = "1";
@@ -39,13 +39,15 @@ namespace Svg
             _defaults["stroke-linejoin"] = "miter";
             _defaults["stroke-dasharray"] = "none";
             _defaults["stroke-dashoffset"] = "0";
+
+            _defaults["pathLength"] = "0";
         }
 
         /// <summary>
         /// Checks whether the property value is the default value of the svg definition.
         /// </summary>
         /// <param name="attributeName">Name of the svg attribute</param>
-        /// <param name="propertyValue">.NET value of the attribute</param>
+        /// <param name="value">.NET value of the attribute</param>
         public static bool IsDefault(string attributeName, string value)
         {
             if (_defaults.ContainsKey(attributeName))

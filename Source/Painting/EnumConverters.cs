@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Text;
 
 namespace Svg
 {
@@ -80,7 +81,10 @@ namespace Svg
         {
             if (destinationType == typeof(string))
             {
-            	return ((T)value).ToString().ToLower();
+            	var text = new StringBuilder(value.ToString());
+                if (text.Length > 0)
+                    text[0] = char.ToLowerInvariant(text[0]);
+                return text.ToString();
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
@@ -112,6 +116,10 @@ namespace Svg
     }
 
     public sealed class SvgStrokeLineJoinConverter : EnumBaseConverter<SvgStrokeLineJoin>
+    {
+    }
+    
+    public sealed class SvgPatternUnitsConverter : EnumBaseConverter<SvgPatternUnits>
     {
     }
     

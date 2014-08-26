@@ -109,6 +109,7 @@
     <Compile Include="DataTypes\SvgCoordinateUnits.cs" />
     <Compile Include="DataTypes\SvgFontWeight.cs" />
     <Compile Include="DataTypes\SvgOverflow.cs" />
+    <Compile Include="DataTypes\SvgPatternUnits.cs" />
     <Compile Include="DataTypes\SvgUnitCollection.cs" />
     <Compile Include="DataTypes\SvgUri.cs" />
     <Compile Include="DataTypes\SvgUriConverter.cs" />

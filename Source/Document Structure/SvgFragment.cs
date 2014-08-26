@@ -52,11 +52,11 @@ namespace Svg
         /// Gets or sets the viewport of the element.
         /// </summary>
         /// <value></value>
-        [SvgAttribute("viewBox")]
+        [SvgAttribute("viewbox")]
         public SvgViewBox ViewBox
         {
-            get { return this.Attributes.GetAttribute<SvgViewBox>("viewBox"); }
-            set { this.Attributes["viewBox"] = value; }
+            get { return this.Attributes.GetAttribute<SvgViewBox>("viewbox"); }
+            set { this.Attributes["viewbox"] = value; }
         }
         
         /// <summary>
