@@ -958,6 +958,15 @@ namespace Svg
 
         public virtual void EditScale(float scale)
         {
+            foreach (var transform in Transforms)
+            {
+                if (transform is SvgRotate)
+                {
+                    var impl = (SvgRotate)transform;
+                    impl.CenterY *= scale;
+                    impl.CenterX *= scale;
+                }
+            }
             foreach (var child in Children)
                 child.EditScale(scale);
         }
