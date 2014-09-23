@@ -943,6 +943,15 @@ namespace Svg
 
         public virtual void EditOffset(float dx, float dy)
         {
+            foreach (var transform in Transforms)
+            {
+                if (transform is SvgRotate)
+                {
+                    var impl = (SvgRotate)transform;
+                    impl.CenterX += dx;
+                    impl.CenterY += dy;
+                }
+            }
             foreach (var child in Children)
                 child.EditOffset(dx, dy);
         }
