@@ -41,7 +41,7 @@ namespace Svg
         {
             if (m_uri != null)
                 return m_uri.ToString();
-            return DATA_HEADER + m_mime + ';' + DATA_BASE64;
+            return DATA_HEADER + m_mime + ';' + DATA_BASE64 + Convert.ToBase64String(m_data);
         }
         /// <summary>
         /// Attempts to download the contents at the referenced URI
