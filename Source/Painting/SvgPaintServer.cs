@@ -16,7 +16,7 @@ namespace Svg
         /// <summary>
         /// An unspecified <see cref="SvgPaintServer"/>.
         /// </summary>
-        public static readonly SvgPaintServer None = new SvgColourServer();
+        public static readonly SvgPaintServer None = new SvgColourServer(Color.Transparent);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SvgPaintServer"/> class.
@@ -51,8 +51,5 @@ namespace Svg
         {
             return String.Format("url(#{0})", this.ID);
         }
-
-
-
     }
 }

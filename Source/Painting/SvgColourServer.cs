@@ -81,7 +81,7 @@ namespace Svg
             if (objColor == null)
                 return false;
 
-            return this.GetHashCode() == objColor.GetHashCode();
+            return this._colour == objColor._colour;
         }
 
         public override int GetHashCode()
