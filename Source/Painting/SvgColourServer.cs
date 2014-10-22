@@ -77,6 +77,8 @@ namespace Svg
 
         public override bool Equals(object obj)
         {
+            if (ReferenceEquals(this, obj))
+                return true;
             var objColor = obj as SvgColourServer;
             if (objColor == null)
                 return false;
