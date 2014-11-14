@@ -17,11 +17,15 @@ namespace Svg
         /// An unspecified <see cref="SvgPaintServer"/>.
         /// </summary>
         public static readonly SvgPaintServer None = new SvgColourServer(Color.Transparent);
+        /// <summary>
+        /// An unspecified <see cref="SvgPaintServer"/>.
+        /// </summary>
+        public static readonly SvgPaintServer NotSet = new SvgColourServer(Color.Black);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SvgPaintServer"/> class.
         /// </summary>
-        public SvgPaintServer()
+        protected SvgPaintServer()
         {
         }
 

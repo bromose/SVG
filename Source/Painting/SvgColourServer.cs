@@ -8,10 +8,6 @@ namespace Svg
     public sealed class SvgColourServer : SvgPaintServer
     {
     	
-    	/// <summary>
-        /// An unspecified <see cref="SvgPaintServer"/>.
-        /// </summary>
-        public static readonly SvgPaintServer NotSet = new SvgColourServer();
     	
         public SvgColourServer() : this(Color.Black)
         {
@@ -27,8 +23,10 @@ namespace Svg
         public Color Colour
         {
             get { return this._colour; }
-            set { this._colour = value; }
+            //set { this._colour = value; }
         }
+
+        public string Name { get; private set; }
 
         public override Brush GetBrush(SvgVisualElement styleOwner, float opacity)
         {
@@ -70,20 +68,22 @@ namespace Svg
 		public override SvgElement DeepCopy<T>()
 		{
 			var newObj = base.DeepCopy<T>() as SvgColourServer;
-			newObj.Colour = this.Colour;
+			newObj._colour = this.Colour;
 			return newObj;
 
 		}
 
         public override bool Equals(object obj)
         {
+            if (obj == null)
+                return false;
             if (ReferenceEquals(this, obj))
                 return true;
             var objColor = obj as SvgColourServer;
             if (objColor == null)
                 return false;
 
-            return this._colour == objColor._colour;
+            return ToString().Equals(obj.ToString());
         }
 
         public override int GetHashCode()
