@@ -27,32 +27,36 @@ namespace Svg
             {
                 return SvgColourServer.NotSet;
             }
-            else if (value.IndexOf("url(#") > -1)
+            value = value.Trim();
+            if (value.IndexOf("url(#") > -1)
             {
                 Match match = _urlRefPattern.Match(value);
                 Uri id = new Uri(match.Groups[1].Value, UriKind.Relative);
                 return (SvgPaintServer)document.IdManager.GetElementById(id);
             }
             // If referenced to to a different (linear or radial) gradient
-            else if (document.IdManager.GetElementById(value) != null && document.IdManager.GetElementById(value).GetType().BaseType == typeof(SvgGradientServer))
+            var byId = document.IdManager.GetElementById(value);
+            if (byId is SvgGradientServer)
             {
-                return (SvgPaintServer)document.IdManager.GetElementById(value);
+                return (SvgPaintServer)byId;
             }
-            else // Otherwise try and parse as colour
+            if (SvgColourConverter.GarmentColorName.Equals(value, StringComparison.OrdinalIgnoreCase))
             {
-                return new SvgColourServer((Color)_colourConverter.ConvertFrom(value.Trim()));
+                return new SvgKnockoutServer(value);
             }
+            // Otherwise try and parse as colour
+            return new SvgColourServer((Color)_colourConverter.ConvertFrom(value), null);
         }
 
         public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
         {
             if (value is string)
             {
-            	var s = (string) value;
-            	if(String.Equals( s.Trim(), "none", StringComparison.OrdinalIgnoreCase) || string.IsNullOrWhiteSpace(s))
-            		return SvgPaintServer.None;
-            	else
-                	return SvgPaintServerFactory.Create(s, (SvgDocument)context);
+                var s = (string)value;
+                if (String.Equals(s.Trim(), "none", StringComparison.OrdinalIgnoreCase) || string.IsNullOrWhiteSpace(s))
+                    return SvgPaintServer.None;
+                else
+                    return SvgPaintServerFactory.Create(s, (SvgDocument)context);
             }
 
             return base.ConvertFrom(context, culture, value);
@@ -98,7 +102,7 @@ namespace Svg
                 }
                 else
                 {
-                	return "none";
+                    return "none";
                 }
             }
 

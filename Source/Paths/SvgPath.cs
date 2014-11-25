@@ -135,7 +135,7 @@ namespace Svg
  			if (this.Stroke != null)
 			{
 				float strokeWidth = this.StrokeWidth.ToDeviceValue(this);
-				using (var pen = new Pen(this.Stroke.GetBrush(this, this.StrokeOpacity), strokeWidth))
+				using (var pen = new Pen(this.Stroke.GetBrush(this, renderer, this.StrokeOpacity), strokeWidth))
 				{
 					if (this.StrokeDashArray != null && this.StrokeDashArray.Count > 0)
 					{

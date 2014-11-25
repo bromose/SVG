@@ -16,11 +16,11 @@ namespace Svg
         /// <summary>
         /// An unspecified <see cref="SvgPaintServer"/>.
         /// </summary>
-        public static readonly SvgPaintServer None = new SvgColourServer(Color.Transparent);
+        public static readonly SvgPaintServer None = new SvgColourServer(Color.Transparent, "none");
         /// <summary>
         /// An unspecified <see cref="SvgPaintServer"/>.
         /// </summary>
-        public static readonly SvgPaintServer NotSet = new SvgColourServer(Color.Black);
+        public static readonly SvgPaintServer NotSet = new SvgColourServer(Color.Black, "");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SvgPaintServer"/> class.
@@ -43,7 +43,7 @@ namespace Svg
         /// </summary>
         /// <param name="styleOwner">The owner <see cref="SvgVisualElement"/>.</param>
         /// <param name="opacity">The opacity of the brush.</param>
-        public abstract Brush GetBrush(SvgVisualElement styleOwner, float opacity);
+        public abstract Brush GetBrush(SvgVisualElement styleOwner, SvgRenderer renderer, float opacity);
 
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.

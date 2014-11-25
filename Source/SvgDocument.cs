@@ -17,6 +17,9 @@ namespace Svg
     /// </summary>
     public class SvgDocument : SvgFragment, ITypeDescriptorContext
     {
+        /// <summary>
+        /// The default PPI this document will render at
+        /// </summary>
         public static readonly int PointsPerInch = 96;
         private SvgElementIdManager _idManager;
 
@@ -25,7 +28,7 @@ namespace Svg
         /// </summary>
         public SvgDocument()
         {
-            Ppi = 96;
+            Ppi = PointsPerInch;
         }
 
         /// <summary>

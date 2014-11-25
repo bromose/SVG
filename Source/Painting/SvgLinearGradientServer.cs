@@ -73,7 +73,7 @@ namespace Svg
             get { return new SvgPoint(this.X2, this.Y2); }
         }
 
-        public override Brush GetBrush(SvgVisualElement owner, float opacity)
+        public override Brush GetBrush(SvgVisualElement owner, SvgRenderer renderer, float opacity)
         {
             // Need at least 2 colours to do the gradient fill
             if (this.Stops.Count < 2)

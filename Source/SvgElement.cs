@@ -31,9 +31,6 @@ namespace Svg
             public SvgAttributeAttribute Attribute;
         }
 
-        //reflection cache
-        private IEnumerable<PropertyAttributeTuple> _svgPropertyAttributes;
-        private IEnumerable<EventAttributeTuple> _svgEventAttributes;
 
         internal SvgElement _parent;
         private string _elementName;
@@ -376,17 +373,6 @@ namespace Svg
             Attributes.AttributeChanged += Attributes_AttributeChanged;
             CustomAttributes.AttributeChanged += Attributes_AttributeChanged;
 
-            //find svg attribute descriptions
-            _svgPropertyAttributes = from PropertyDescriptor a in TypeDescriptor.GetProperties(this)
-                                     let attribute = a.Attributes[typeof(SvgAttributeAttribute)] as SvgAttributeAttribute
-                                     where attribute != null
-                                     select new PropertyAttributeTuple { Property = a, Attribute = attribute };
-
-            _svgEventAttributes = from EventDescriptor a in TypeDescriptor.GetEvents(this)
-                                  let attribute = a.Attributes[typeof(SvgAttributeAttribute)] as SvgAttributeAttribute
-                                  where attribute != null
-                                  select new EventAttributeTuple { Event = a.ComponentType.GetField(a.Name, BindingFlags.Instance | BindingFlags.NonPublic), Attribute = attribute };
-
         }
 
         //dispatch attribute event
@@ -400,6 +386,17 @@ namespace Svg
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Moved from Constructor since it invokes a virtual method.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<EventAttributeTuple> GetSvgEventAttributes()
+        {
+            return from EventDescriptor a in TypeDescriptor.GetEvents(this)
+                   let attribute = a.Attributes[typeof(SvgAttributeAttribute)] as SvgAttributeAttribute
+                   where attribute != null
+                   select new EventAttributeTuple { Event = a.ComponentType.GetField(a.Name, BindingFlags.Instance | BindingFlags.NonPublic), Attribute = attribute };
+        }
 
         /// <summary>
         /// Renders this element to the <see cref="SvgRenderer"/>.
@@ -453,7 +450,10 @@ namespace Svg
         protected virtual void WriteAttributes(XmlTextWriter writer)
         {
             //properties
-            foreach (var attr in _svgPropertyAttributes)
+            foreach (var attr in from PropertyDescriptor a in TypeDescriptor.GetProperties(this)
+                                 let attribute = a.Attributes[typeof(SvgAttributeAttribute)] as SvgAttributeAttribute
+                                 where attribute != null
+                                 select new PropertyAttributeTuple { Property = a, Attribute = attribute })
             {
                 if (attr.Property.Converter.CanConvertTo(typeof(string)))
                 {
@@ -497,7 +497,7 @@ namespace Svg
             //events
             if (AutoPublishEvents)
             {
-                foreach (var attr in _svgEventAttributes)
+                foreach (var attr in GetSvgEventAttributes())
                 {
                     var evt = attr.Event.GetValue(this);
 
@@ -701,7 +701,7 @@ namespace Svg
                 newObj.Children.Add(child.DeepCopy());
             }
 
-            foreach (var attr in this._svgEventAttributes)
+            foreach (var attr in this.GetSvgEventAttributes())
             {
                 var evt = attr.Event.GetValue(this);
 

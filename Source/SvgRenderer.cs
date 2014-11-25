@@ -38,6 +38,10 @@ namespace Svg
             renderer._innerGraphics = graphics;
             return renderer;
         }
+        /// <summary>
+        /// Field reference to a brush to paint the background with
+        /// </summary>
+        public Brush KnockoutBrush;
 
         public virtual void DrawImageUnscaled(Image image, Point location)
         {

@@ -13,6 +13,10 @@ namespace Svg
     public class SvgColourConverter : System.Drawing.ColorConverter
     {
         /// <summary>
+        /// The name of the color that will knockout an SVG during rendering through to the sub-straight.
+        /// </summary>
+        public static readonly string GarmentColorName = "Garment";
+        /// <summary>
         /// Converts the given object to the converter's native type.
         /// </summary>
         /// <param name="context">A <see cref="T:System.ComponentModel.TypeDescriptor"/> that provides a format context. You can use this object to get additional information about the environment from which this converter is being invoked.</param>

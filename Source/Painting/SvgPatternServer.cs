@@ -114,7 +114,7 @@ namespace Svg
         /// </summary>
         /// <param name="styleOwner">The owner <see cref="SvgVisualElement"/>.</param>
         /// <param name="opacity">The opacity of the brush.</param>
-        public override Brush GetBrush(SvgVisualElement renderingElement, float opacity)
+        public override Brush GetBrush(SvgVisualElement renderingElement, SvgRenderer renderer, float opacity)
         {
             // If there aren't any children, return null
             if (this.Children.Count == 0)
@@ -128,10 +128,9 @@ namespace Svg
             float height = this._height.ToDeviceValue(renderingElement, true);
 
             Bitmap image = new Bitmap((int)width, (int)height);
-            using (SvgRenderer renderer = SvgRenderer.FromImage(image))
+            using (SvgRenderer texture_renderer = SvgRenderer.FromImage(image))
+            using (Matrix patternMatrix = new Matrix())
             {
-                Matrix patternMatrix = new Matrix();
-
                 // Apply a translate if needed
                 if (this._x.Value > 0.0f || this._y.Value > 0.0f)
                 {
@@ -147,17 +146,18 @@ namespace Svg
                     patternMatrix.Scale(this.Width.ToDeviceValue() / this.ViewBox.Width, this.Height.ToDeviceValue() / this.ViewBox.Height);
                 }
 
-                renderer.Transform = patternMatrix;
-                renderer.CompositingQuality = CompositingQuality.HighQuality;
-                renderer.SmoothingMode = SmoothingMode.AntiAlias;
-                renderer.PixelOffsetMode = PixelOffsetMode.Half;
+                texture_renderer.Transform = patternMatrix;
+                texture_renderer.CompositingQuality = CompositingQuality.HighQuality;
+                texture_renderer.SmoothingMode = SmoothingMode.AntiAlias;
+                texture_renderer.PixelOffsetMode = PixelOffsetMode.Half;
+                texture_renderer.KnockoutBrush = renderer.KnockoutBrush;
 
                 foreach (SvgElement child in this.Children)
                 {
-                    child.RenderElement(renderer);
+                    child.RenderElement(texture_renderer);
                 }
 
-                renderer.Save();
+                texture_renderer.Save();
             }
 
             TextureBrush textureBrush = new TextureBrush(image);

@@ -229,7 +229,7 @@ namespace Svg
         /// <value>The fill.</value>
         public override SvgPaintServer Fill
         {
-            get { return (this.Attributes["fill"] == null) ? new SvgColourServer(Color.Black) : (SvgPaintServer)this.Attributes["fill"]; }
+            get { return (SvgPaintServer)this.Attributes["fill"] ?? new SvgColourServer(Color.Black, null); }
             set { this.Attributes["fill"] = value; }
         }
 

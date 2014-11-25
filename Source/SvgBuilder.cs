@@ -326,7 +326,8 @@ namespace Svg
                 throw new InvalidOperationException("The CreateDocument method can only be used to parse root <svg> elements.");
             }
 
-            return (SvgDocument)CreateElement(reader, true, null);
+            var doc = (SvgDocument)CreateElement(reader, true, null);
+            return doc;
         }
 
         SvgElement CreateElement(XmlTextReader reader, bool fragmentIsDocument, SvgDocument document)

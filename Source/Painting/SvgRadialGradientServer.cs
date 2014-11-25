@@ -55,7 +55,7 @@ namespace Svg
             Radius = new SvgUnit(SvgUnitType.Percentage, 50);
         }
 
-        public override Brush GetBrush(SvgVisualElement renderingElement, float opacity)
+        public override Brush GetBrush(SvgVisualElement renderingElement, SvgRenderer renderer, float opacity)
         {
             GraphicsPath path = new GraphicsPath();
             float left = this.CenterX.ToDeviceValue(renderingElement);
