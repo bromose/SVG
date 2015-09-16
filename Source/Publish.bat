@@ -27,7 +27,7 @@ REM in the AssemblyInfo.cs file in the project (see: http://stackoverflow.com/qu
 cmd /c %nuget% pack "Svg.csproj" -IncludeReferencedProjects -o bin\nuget_build -p Configuration=%config% %version% 
 
 REM ** Push the file to myget ** 
-REM There should only be a single file in the 
+REM There should only be a single file in the -Source https://www.nuget.org/
 for /f %%l in ('dir /b /s bin\nuget_build\*.nupkg') do (
-    cmd /c %nuget% push %%l -Source http://aresnuget
+    cmd /c %nuget% push %%l 
 )
